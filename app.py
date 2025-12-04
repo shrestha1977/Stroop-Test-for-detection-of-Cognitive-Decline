@@ -54,6 +54,8 @@ if "results" not in st.session_state:
     st.session_state.results = []
 if "start_time" not in st.session_state:
     st.session_state.start_time = None
+if "user_age" not in st.session_state:
+    st.session_state.user_age = None
 
 st.set_page_config(page_title="Dementia Detection Stroop Test", layout="centered")
 
@@ -69,7 +71,14 @@ if st.session_state.stage == "instructions":
         - Try to respond quickly and accurately.
         - After practice, the test block will start.
     """)
-    if st.button("Start Test"):
+
+    # ---------------- Age input ----------------
+    age_input = st.number_input(
+        "Enter your age (years):", min_value=10, max_value=120, value=30, step=1
+    )
+    st.session_state.user_age = age_input
+
+    if st.button("Start Test") and st.session_state.user_age is not None:
         st.session_state.stage = "test"
         st.session_state.current_idx = 0
         st.session_state.results = []
@@ -123,9 +132,9 @@ elif st.session_state.stage == "results":
         st.metric("Average Reaction Time (s)", f"{avg_rt:.3f}")
         st.metric("Stroop Score", stroop_score)
 
-        # ML prediction
-        age = st.number_input("Enter your age", 40, 90, key="age_input")
-        user_data = np.array([[age, avg_rt, correct, wrong, stroop_score]])
+        # ML prediction using age collected at the start
+        user_age = st.session_state.user_age
+        user_data = np.array([[user_age, avg_rt, correct, wrong, stroop_score]])
         user_scaled = scaler.transform(user_data)
         pred = model.predict(user_scaled)[0]
 
@@ -138,11 +147,4 @@ elif st.session_state.stage == "results":
 
         # Trial-level table & download
         st.write("### Trial Data")
-        st.dataframe(df)
-        csv = df.to_csv(index=False).encode("utf-8")
-        st.download_button("Download Results CSV", data=csv, file_name="stroop_results.csv", mime="text/csv")
-
-    if st.button("Restart Test"):
-        for k in list(st.session_state.keys()):
-            del st.session_state[k]
-        st.rerun()
+        st.dataframe(d
