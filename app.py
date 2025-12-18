@@ -57,9 +57,9 @@ if "start_time" not in st.session_state:
 if "user_age" not in st.session_state:
     st.session_state.user_age = None
 
-st.set_page_config(page_title="Dementia Detection Stroop Test", layout="centered")
+st.set_page_config(page_title="Cognitive Decline Detection Stroop Test", layout="centered")
 
-st.title("🧠 Dementia Detection Using Stroop Test")
+st.title("🧠 Cognitive Decline Detection Using Stroop Test")
 st.write("Select the **ink color** of the word as fast and accurately as possible.")
 
 # ---------------- Instructions ----------------
@@ -141,9 +141,9 @@ elif st.session_state.stage == "results":
         st.write("---")
         st.write("## Dementia Risk Result")
         if pred == 1:
-            st.error("⚠ High probability of cognitive impairment / dementia")
+            st.error("⚠ High risk of Cognitive Decline")
         else:
-            st.success("✅ Low probability of dementia")
+            st.success("✅ Low risk of Cognitive Decline")
 
         # Trial-level table & download
         st.write("### Test Data")
@@ -155,4 +155,5 @@ elif st.session_state.stage == "results":
         for k in list(st.session_state.keys()):
             del st.session_state[k]
         st.rerun()
+
 
