@@ -130,7 +130,7 @@ elif st.session_state.stage == "results":
         st.metric("Correct Answers", f"{correct} / {NUM_QUESTIONS}")
         st.metric("Wrong Answers", wrong)
         st.metric("Average Reaction Time (s)", f"{avg_rt:.3f}")
-        st.metric("Stroop Score", stroop_score)
+        
 
         # ML prediction using age collected at the start
         user_age = st.session_state.user_age
@@ -156,6 +156,7 @@ elif st.session_state.stage == "results":
         for k in list(st.session_state.keys()):
             del st.session_state[k]
         st.rerun()
+
 
 
 
